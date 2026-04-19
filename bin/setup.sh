@@ -57,27 +57,50 @@ else
     echo -e "${GREEN}✓ Уже в репозитории all_solvit${NC}"
 fi
 
-# 6. Создание .env
+# 6. Создание .env (только если отсутствует)
 echo -e "${YELLOW}→ Настройка .env...${NC}"
 if [ ! -f ".env" ]; then
+    # Генерация случайного SECRET_KEY для JWT
+    SECRET_KEY=$(openssl rand -hex 32 2>/dev/null || echo "super_secret_key_$(date +%s%N | sha256sum | head -c 64)")
     cat > .env << EOF
-SECRET_KEY=super_secret_key_$(openssl rand -hex 16 2>/dev/null || echo "test_key_123")
+# Solvit Environment
+HIDE_DEV_FILES=true
+
+# PostgreSQL (docker-compose)
+DB_USER=postgres
+DB_PASSWORD=dinelefox
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=all_solvit
+
+# JWT
+SECRET_KEY=${SECRET_KEY}
 ALGORITHM=HS256
-DATABASE_URL_asyncpg=postgresql+asyncpg://solvit:solvit@localhost:5432/solvit
+
+# Uvicorn
+UVICORN_HOST=0.0.0.0
+UVICORN_PORT=8000
+
+# Telegram Bot (замените на свой токен)
+TOKEN=7687868610:AAGtBS0RWt9MQiH7Y4qEkC4hy1yzATQzbCE
+
+# Dev flags
+RESTART_PG=1
 DEBUG=True
 TESTING=False
 EOF
-    echo -e "${GREEN}✓ .env создан${NC}"
+    echo -e "${GREEN}✓ .env создан с тестовыми значениями${NC}"
+    echo -e "${YELLOW}⚠️  При необходимости отредактируйте .env (особенно TOKEN для бота)${NC}"
 else
-    echo -e "${GREEN}✓ .env уже существует${NC}"
+    echo -e "${GREEN}✓ .env уже существует, пропускаем создание${NC}"
 fi
 
-# 7. Запуск контейнеров
+# 7. Запуск контейнеров (PostgreSQL)
 echo -e "${YELLOW}→ Запуск контейнеров...${NC}"
 docker compose up -d
 echo -e "${GREEN}✓ Контейнеры запущены${NC}"
 
-# 8. Установка зависимостей
+# 8. Установка зависимостей Python через uv
 echo -e "${YELLOW}→ Установка зависимостей...${NC}"
 uv sync
 echo -e "${GREEN}✓ Зависимости установлены${NC}"
