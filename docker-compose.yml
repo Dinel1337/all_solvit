@@ -1,0 +1,94 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dinelefox
+      POSTGRES_DB: all_solvit
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  db-init:
+    build: .
+    command: uv run python main.py --init-db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: all_solvit
+      DB_USER: postgres
+      DB_PASSWORD: dinelefox
+    restart: "no"
+
+  api_tracker:
+    build: .
+    command: uv run python main.py -n 3
+    ports:
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - ./src:/app/src                           # ← hot reload
+      - ./global_config.py:/app/global_config.py # ← конфиг тоже
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # db-init:
+      #   condition: service_completed_successfully
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: all_solvit
+      DB_USER: postgres
+      DB_PASSWORD: dinelefox
+      UVICORN_HOST: "0.0.0.0"
+    restart: on-failure
+
+  quiz_platform:
+    build: .
+    command: uv run python main.py -n 2
+    ports:
+      - "0.0.0.0:8001:8001"
+    volumes:
+      - ./src:/app/src                           # ← hot reload
+      - ./global_config.py:/app/global_config.py
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # db-init:
+      #   condition: service_completed_successfully
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: all_solvit
+      DB_USER: postgres
+      DB_PASSWORD: dinelefox
+      UVICORN_HOST: "0.0.0.0"
+    restart: on-failure
+
+volumes:
+  postgres_data:
+
+#  chat_bot:
+#    build: .
+#    command: uv run python main.py -n 1
+#    environment:
+#      TOKEN: ${TOKEN}
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_NAME: all_solvit
+#      DB_USER: postgres
+#      DB_PASSWORD: dinelefox
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      db-init:
+#        condition: service_completed_successfully
+#    restart: on-failure

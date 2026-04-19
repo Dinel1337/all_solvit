@@ -1,0 +1,17 @@
+{
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/.."
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python-envs.defaultEnvManager": "ms-python.python:poetry",
+    "python-envs.defaultPackageManager": "ms-python.python:poetry",
+    "files.exclude": {
+        "**/__pycache__": true,
+        ".vscode": true,
+        "__init__.py": true,
+        "config.py": true,
+        "chat_bot_binance": true
+    }
+}
