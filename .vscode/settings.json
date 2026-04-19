@@ -13,11 +13,10 @@
         ".coveragerc": true,
         "README.md": true,
         ".vscode": true,
-        ".tox": true,
-        ".coverage": true,
+        "uv.lock": true,
         "LICENSE": true,
-        ".github":true,
-        "uv.lock": true
-
+        ".coverage": true,
+        ".tox": true,
+        ".github": true
     }
 }

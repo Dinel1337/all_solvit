@@ -49,3 +49,4 @@ api_tracker/
 │   └── session.py             # get_api_tracker_db
 └── app.db                     # Файл SQLAlchemy (создаётся автоматически)
 ```
+![alt text](api_tracker.png)

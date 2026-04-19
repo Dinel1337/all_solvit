@@ -12,8 +12,6 @@
         ".gitignore": true,
         ".coveragerc": true,
         "README.md": true,
-        ".vscode": true,
-        "uv.lock": true,
-        "LICENSE": true
+        ".vscode": true
     }
 }
