@@ -4,6 +4,22 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: dinelefox
+          POSTGRES_DB: all_solvit
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -15,7 +31,7 @@ jobs:
           echo "DB_PASSWORD=dinelefox" >> .env
           echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "DB_NAME=test_db" >> .env
+          echo "DB_NAME=all_solvit" >> .env
           echo "HIDE_DEV_FILES=true" >> .env
           echo "UVICORN_HOST=0.0.0.0" >> .env
           echo "UVICORN_PORT=8000" >> .env
