@@ -90,7 +90,12 @@ settings['files.exclude'] = {
     ".gitignore": True,
     ".coveragerc": True,
     "README.md": True,
-    ".vscode": True
+    ".vscode": True,
+    "uv.lock": True,
+    "LICENSE": True,
+    ".coverage": True,
+    ".tox": True,
+    ".github": True
 }
 
 # Сохраняем
