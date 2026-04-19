@@ -10,4 +10,13 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install tox
+      - run: |
+          echo "DB_USER=postgres" >> .env
+          echo "DB_PASSWORD=dinelefox" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "DB_NAME=test_db" >> .env
+          echo "HIDE_DEV_FILES=true" >> .env
+          echo "UVICORN_HOST=0.0.0.0" >> .env
+          echo "UVICORN_PORT=8000" >> .env
       - run: tox
