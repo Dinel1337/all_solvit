@@ -94,3 +94,5 @@ uv run python main.py -t -n{номер проекта}
 
 ## Источники
 solvit.space/projects/tg_bot_bitcoin
+solvit.space/projects/workout_tracker
+solvit.space/projects/quiz_platform
