@@ -85,45 +85,7 @@ echo -e "${YELLOW}→ Установка зависимостей...${NC}"
 uv sync
 echo -e "${GREEN}✓ Зависимости установлены${NC}"
 
-# 9. Инициализация базы данных и тестового пользователя
-echo -e "${YELLOW}→ Инициализация БД и тестового пользователя...${NC}"
-uv run python -c "
-import asyncio
-import sys
-sys.path.insert(0, '.')
-
-from sqlalchemy import select
-from src._core.database import init_db, PublicBase
-from src._core.models import User
-from src._core.utils import crypt_pass
-from src._core.database.database_alchemy.session import DatabaseManager
-
-async def setup():
-    await init_db(PublicBase)
-    session_maker = DatabaseManager.get_session_maker()
-    async with session_maker() as session:
-        result = await session.execute(
-            select(User).where(User.email == 'test@example.com')
-        )
-        existing = result.scalar_one_or_none()
-        if not existing:
-            user = User(
-                email='test@example.com',
-                username='testuser',
-                password_hash=crypt_pass('testpass'),
-                active=True
-            )
-            session.add(user)
-            await session.commit()
-            print('✅ Тестовый пользователь создан: test@example.com / testpass')
-        else:
-            print('✅ Тестовый пользователь уже существует')
-
-asyncio.run(setup())
-"
-echo -e "${GREEN}✓ База данных готова${NC}"
-
-# 10. Финальный вывод
+# 9. Финальный вывод
 echo ""
 echo -e "${GREEN}╔══════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║                    ✅ Установка завершена!                 ║${NC}"
@@ -142,3 +104,5 @@ echo ""
 echo -e "${BLUE}🛑 Остановка контейнеров:${NC}"
 echo -e "   ${GREEN}docker compose down${NC}"
 echo ""
+
+# этот баш я сделал через нейросеть()()()
