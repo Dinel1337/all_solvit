@@ -1,1 +1,23 @@
-{}
+{
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        ".venv": true,
+        "bin": true,
+        "tox.ini": true,
+        "poetry.lock": true,
+        "pyproject.toml": true,
+        ".env": true,
+        "Dockerfile": true,
+        ".gitignore": true,
+        ".coveragerc": true,
+        "README.md": true,
+        ".vscode": true,
+        ".tox": true,
+        ".coverage": true,
+        "LICENSE": true,
+        ".github":true,
+        "uv.lock": true
+
+    }
+}
