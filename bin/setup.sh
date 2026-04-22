@@ -113,3 +113,4 @@ echo ""
 echo -e "${BLUE}🛑 Остановка контейнеров:${NC}"
 echo -e "   ${GREEN}docker compose down${NC}"
 echo ""
+sudo chown -R $USER:$USER $(find . -type d -name "__pycache__") 2>/dev/null
