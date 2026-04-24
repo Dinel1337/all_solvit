@@ -18,5 +18,7 @@
         ".coverage": true,
         ".tox": true,
         ".github": true
-    }
-}
+    },
+    "python.analysis.typeCheckingMode": "off"
+
+}   
