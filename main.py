@@ -52,7 +52,7 @@ def main():
             await init_db(PublicBase)
             await init_db(ApiTrackerBase)
             await init_db(QuizPlatformBase)
-            print("✅ Все схемы базы данных успешно инициализированы")
+            print("Все схемы базы данных успешно инициализированы")
         except Exception as e:
             logger.error(f"Ошибка инициализации БД: {e}")
             raise
