@@ -1,0 +1,1 @@
+from src.uptime_monitoring.api.domain.crud_domain import router

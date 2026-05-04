@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/!toggle_bash_view
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -34,7 +34,7 @@ case $choice in
         echo -e "${GREEN}✓ Показываем полную структуру...${NC}"
         if [ -f "$SETTINGS_FILE" ]; then
             cp "$SETTINGS_FILE" "$SETTINGS_FILE.bak"
-            python3 << 'PYEOF'
+            python3 << 'EOF'
 import json
 import os
 
@@ -51,7 +51,7 @@ if os.path.exists(settings_file):
     
     with open(settings_file, 'w') as f:
         json.dump(settings, f, indent=4)
-PYEOF
+EOF
             echo -e "${GREEN}✓ Все файлы теперь будут видны${NC}"
         else
             echo -e "${GREEN}✓ Уже в режиме полной структуры${NC}"
@@ -61,13 +61,14 @@ PYEOF
         echo -e "${RED}✓ Скрываем служебные файлы...${NC}"
         mkdir -p "$SETTINGS_DIR"
         
-        python3 << 'PYEOF'
+        python3 << 'EOF'
 import json
 import os
 
 settings_file = ".vscode/settings.json"
 settings = {}
 
+# Загружаем существующие настройки если есть
 if os.path.exists(settings_file):
     with open(settings_file, 'r') as f:
         try:
@@ -75,22 +76,33 @@ if os.path.exists(settings_file):
         except:
             settings = {}
 
+# Добавляем files.exclude
 settings['files.exclude'] = {
-    "**/.*": True,
     "**/__pycache__": True,
+    "**/.pytest_cache": True,
+    ".venv": True,
     "bin": True,
     "tox.ini": True,
     "poetry.lock": True,
     "pyproject.toml": True,
-    "uv.lock": True,
+    ".env": True,
     "Dockerfile": True,
-    "README.md": True
+    ".gitignore": True,
+    ".coveragerc": True,
+    "README.md": True,
+    ".vscode": True,
+    "uv.lock": True,
+    "LICENSE": True,
+    ".coverage": True,
+    ".tox": True,
+    ".github": True
 }
 
+# Сохраняем
 with open(settings_file, 'w') as f:
     json.dump(settings, f, indent=4)
-PYEOF
-        echo -e "${RED}✓ Служебные файлы будут скрыты (включая все точечные)${NC}"
+EOF
+        echo -e "${RED}✓ Служебные файлы будут скрыты${NC}"
         ;;
     q|Q)
         echo -e "${YELLOW}👋 Выход без изменений${NC}"

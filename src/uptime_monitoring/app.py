@@ -1,21 +1,17 @@
 import logging
 from fastapi import FastAPI
-
 from .api import router as start_router
-from src._core.auth import authentication_router
-from src._core.auth import AuthTokenMiddleware
-from src._core.database import init_db, QuizPlatformBase
 
+from src._core.database import init_db
 from .config import OpenAPI_text
 from contextlib import asynccontextmanager
+
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        # await init_db(PublicBase)
-        await init_db(QuizPlatformBase)
-            
+        ...            
     except Exception as e:
         logger.error(f"Ошибка бд: {e}")
         raise
@@ -32,9 +28,7 @@ def create_app(lifespan_enabled=True):
         "customCss": ".swagger-ui textarea { min-height: 500px !important; resize: vertical !important; }"}
     )
 
-    app.include_router(authentication_router)
     app.include_router(start_router)
-    app.add_middleware(AuthTokenMiddleware)
 
     return app
 
